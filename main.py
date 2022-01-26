@@ -5,7 +5,7 @@ from data import queries
 import datetime
 
 load_dotenv()
-app = Flask('codecool_series')
+app = Flask('Film-e-ZZ')
 
 
 @app.route('/')
