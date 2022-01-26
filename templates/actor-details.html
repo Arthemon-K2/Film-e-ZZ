@@ -1,0 +1,15 @@
+{% extends 'Layout.html' %}
+{% block title %}Actor Info{% endblock %}
+{% block content %}
+    <div class="card">
+        <h1>Actor informations</h1>
+        <br>
+        {% for details in actor %}
+        <p>Name of actor: {{ details['name'] }}</p>
+        <p>Date of birth: {{ details['birthday'] }}</p>
+        <p>Date of death if it died already: {{ details['death'] }}</p>
+        <p>Biograpy: {{ details['biography'] }}</p>
+        <p>Movies or series list:{% for actor_shows in actor_works %} <a href="/show/{{ actor_shows['id'] }}">{{ actor_shows['title'] }}</a>, {% endfor %}</p>
+        {% endfor %}
+    </div>
+{% endblock %}

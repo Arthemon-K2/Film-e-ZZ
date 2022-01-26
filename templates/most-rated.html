@@ -1,0 +1,43 @@
+{% extends 'Layout.html' %}
+{% block title %}Shows{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+{% endblock %}
+{% block content %}
+    <h1 class="title text-center">Shows</h1>
+    <div class="card">
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Year</th>
+                <th>Runtime (min)</th>
+                <th>Rating</th>
+                <th>Genres</th>
+                <th>Trailer</th>
+                <th>Homepage</th>
+            </tr>
+            {% for show_details in shows %}
+            <tr>
+                <td><a href="/show/{{ show_details['id'] }}">{{ show_details['title'] }}</a></td>
+                <td> {{ show_details['year'] }}</td>
+                <td> {{ show_details['runtime'] }}</td>
+                <td> {{ '%0.1f' | format(show_details['rating'] | float )}}</td>
+                <td> {{ show_details['genres'] }}</td>
+                {% if show_details['trailer'] == None %}
+                <td>No URL</td>
+                {% else %}
+                <td> {{ show_details['trailer'] }}</td>
+                {% endif %}
+                {% if show_details['homepage'] == None %}
+                <td>No URL</td>
+                {% else %}
+                <td> {{ show_details['homepage'] }}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="card">
+       {{ pagination.links }}
+    </div>
+{% endblock %}

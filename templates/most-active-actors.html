@@ -1,0 +1,19 @@
+{%  extends 'Layout.html' %}
+{% block title %}Most Active Actors{% endblock %}
+{% block content %}
+<h1 class="title text-center">Most Active Actors</h1>
+<div id="most-active-actor-small-card" class="card-small">
+    {% for actors in a_actors%}
+    <div class="fixed-size_card_small" onmouseover="isAlive(this)" onmouseout="reset(this)">
+        {% if actors['age_of_death'] == None %}
+        <p class='age' data-alive="yes"><a href="/actor/{{ actors['id'] }}"> {{ actors['name'] }}</a>
+        ({{ actors['age'] }})</p>
+        {% else %}
+        <p class='age' data-alive="no"><a href="/actor/{{ actors['id'] }}">{{ actors['name'] }}</a>
+        ({{ actors['age_of_death'] }})</p>
+        {% endif %}
+        <p class="important">{{ actors['number_of_shows'] }} shows</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

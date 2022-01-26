@@ -1,0 +1,51 @@
+{% extends 'Layout.html' %}
+{% block title %}Search Show{% endblock %}
+{% block content %}
+    <div class="card text-center">
+        <form action="/search" method="post">
+            <label for="title_search">Search</label>
+            <input type="text" id="title_search" name="title_search">
+            <button type="submit">Go!</button>
+        </form>
+    </div>
+    <div class="card">
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Rating</th>
+                <th>Year</th>
+                <th>Trailer</th>
+            </tr>
+            {% for show in hits %}
+                <tr>
+                    <td><a href="/show/{{ show['id'] }}">{{ show['title'] }}</a></td>
+                    <td>{{ show['rating'] }}</td>
+                    <td>{{ show['year'] }}</td>
+                    {% if show['trailer'] == None %}
+                    <td>{{ show['trailer'] }}</td>
+                    {% else %}
+                    <td><button id="watch-trailer">Watch trailer</button></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div id="modal_YT_trailer" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            {% for show in hits %}
+                <div class='yt_video'>
+                {% if show['trailer'] != None %}
+                    <iframe id="player" type="text/html" width="640" height="390"
+                            src="http://www.youtube.com/embed/{{ show['trailer'][27:] }}" frameborder="0">
+                    </iframe>
+                {% else %}
+                    <iframe id="player" type="text/html" width="640" height="390"
+                            srcdoc="No Trailer found in database!">
+                    </iframe>
+                {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

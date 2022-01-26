@@ -1,0 +1,12 @@
+{% extends 'Layout.html' %}
+{% block title %}Actors List{% endblock %}
+{% block content %}
+    <h1 class="title text-center">Actors in database</h1>
+    <div class="card">
+        <ul>
+            {% for actor in actors_list %}
+                <li><a href="/actor/{{ actor['id'] }}">{{ actor['name'] }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
