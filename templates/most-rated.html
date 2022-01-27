@@ -4,40 +4,44 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
 {% endblock %}
 {% block content %}
-    <h1 class="title text-center">Shows</h1>
-    <div class="card">
-        <table>
-            <tr>
-                <th>Title</th>
-                <th>Year</th>
-                <th>Runtime (min)</th>
-                <th>Rating</th>
-                <th>Genres</th>
-                <th>Trailer</th>
-                <th>Homepage</th>
-            </tr>
+    <h1 class="display-1 text-center">Most Rated Shows</h1>
+    <div class="content-fluid">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Year</th>
+                    <th scope="col">Runtime (min)</th>
+                    <th scope="col">Rating</th>
+                    <th scope="col">Genres</th>
+                    <th scope="col">Trailer</th>
+                    <th scope="col">Homepage</th>
+                </tr>
+            </thead>
+            <tbody>
             {% for show_details in shows %}
-            <tr>
-                <td><a href="/show/{{ show_details['id'] }}">{{ show_details['title'] }}</a></td>
-                <td> {{ show_details['year'] }}</td>
-                <td> {{ show_details['runtime'] }}</td>
-                <td> {{ '%0.1f' | format(show_details['rating'] | float )}}</td>
-                <td> {{ show_details['genres'] }}</td>
-                {% if show_details['trailer'] == None %}
-                <td>No URL</td>
-                {% else %}
-                <td> {{ show_details['trailer'] }}</td>
-                {% endif %}
-                {% if show_details['homepage'] == None %}
-                <td>No URL</td>
-                {% else %}
-                <td> {{ show_details['homepage'] }}</td>
-                {% endif %}
-            </tr>
+                <tr>
+                    <th scope="row"><a href="/show/{{ show_details['id'] }}">{{ show_details['title'] }}</a></th>
+                    <td> {{ show_details['year'] }}</td>
+                    <td> {{ show_details['runtime'] }}</td>
+                    <td> {{ '%0.1f' | format(show_details['rating'] | float )}}</td>
+                    <td> {{ show_details['genres'] }}</td>
+                    {% if show_details['trailer'] == None %}
+                    <td>No URL</td>
+                    {% else %}
+                    <td> {{ show_details['trailer'] }}</td>
+                    {% endif %}
+                    {% if show_details['homepage'] == None %}
+                    <td>No URL</td>
+                    {% else %}
+                    <td> {{ show_details['homepage'] }}</td>
+                    {% endif %}
+                </tr>
             {% endfor %}
+            </tbody>
         </table>
     </div>
-    <div class="card">
+    <div class="pagination justify-content-center">
        {{ pagination.links }}
     </div>
 {% endblock %}

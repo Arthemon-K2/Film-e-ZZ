@@ -1,17 +1,22 @@
+import password as password
 from dotenv import load_dotenv
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, session
 from flask_paginate import Pagination, get_page_args
 from data import queries
-import datetime
+from datetime import datetime
+import utils
 
 load_dotenv()
 app = Flask('Film-e-ZZ')
+app.secret_key = b'Film-e-ZZs3cr3tk3y'
+
 
 
 @app.route('/')
 def index():
+    print(session['username'])
     shows = queries.get_shows()
-    return render_template('index.html', shows=shows)
+    return render_template('index.html', shows=shows, username=session['username'])
 
 
 @app.route('/design')
@@ -70,9 +75,48 @@ def search_show_by_title():
     if request.method == 'POST':
         user_search = str(request.form['title_search'])
         hits = queries.search_show_by_title(user_search)
-        print(user_search, hits)
         return render_template('search-show.html', hits=hits)
     return render_template('search-show.html')
+
+
+@app.route('/registration', methods=['GET', 'POST'])
+def user_registration():
+    if request.method == 'GET':
+        return render_template('registration.html')
+    elif request.method == 'POST':
+        user_name = request.form.get('inputUsername')
+        user_email = request.form.get('inputEmail')
+        user_firstname = request.form.get('inputFirstname')
+        user_lastname = request.form.get('inputLastname')
+        user_pssw_hashed = utils.hash_password(request.form.get('inputPassword'))
+        user_role = request.form.get('userRole')
+        user_reg_date = datetime.now()
+        queries.add_user_from_register(user_name, user_email, user_firstname, user_lastname, user_pssw_hashed, user_reg_date, user_role)
+        return redirect('/')
+
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def user_login():
+    if request.method == 'GET':
+        return render_template('login.html')
+
+    elif request.method == 'POST':
+        user_name = request.form.get('inputUsername')
+        user_password = request.form.get('inputPassword')
+
+        loggedInUser = queries.get_user_from_login(user_name)
+
+        if loggedInUser is not None and utils.verify_password(user_password, loggedInUser[0]['hash_pass']):
+            session['username'] = request.form.get('inputUsername')
+            return redirect('/')
+        else:
+            return render_template('login.html')
+
+
+@app.route('/logout')
+def user_logout():
+    return render_template('/')
 
 
 def main():

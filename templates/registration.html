@@ -1,0 +1,46 @@
+{% extends 'Layout.html' %}
+{% block title %}Registration{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1 class="display-1 text-center p-4">Registration</h1>
+        <div class="container text-white bg-dark">
+            <form action="/registration" method="post">
+                <div class="form-row d-flex justify-content-center p-4">
+                    <div class="form-group col-md-6">
+                        <label for="inputUsername">Username</label>
+                        <input type="text" class="form-control" id="inputUsername" name="inputUsername" placeholder="JohnDoe1234">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail">Email</label>
+                        <input type="email" class="form-control" id="inputEmail" name='inputEmail' placeholder="Email">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputFirstname">First name</label>
+                        <input type="text" class="form-control" id="inputFirstname" name="inputFirstname" placeholder="John">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputLastname">Last name</label>
+                        <input type="text" class="form-control" id="inputLastname" name="inputLastname" placeholder="Doe">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputPassword">Password</label>
+                        <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="xdsgfg5fgg/">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="userRole">User's Role</label>
+                        <select class="form-control" id="userRole" name="userRole">
+                            <option selected>Choose...</option>
+                            <option>Admin</option>
+                            <option>Moderator</option>
+                            <option>Blogger</option>
+                            <option>Member</option>
+                            <option>User</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-secondary">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

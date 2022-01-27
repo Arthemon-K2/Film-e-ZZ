@@ -2,18 +2,25 @@
 {% block title %}Most Active Actors{% endblock %}
 {% block content %}
 <h1 class="title text-center">Most Active Actors</h1>
-<div id="most-active-actor-small-card" class="card-small">
-    {% for actors in a_actors%}
-    <div class="fixed-size_card_small" onmouseover="isAlive(this)" onmouseout="reset(this)">
-        {% if actors['age_of_death'] == None %}
-        <p class='age' data-alive="yes"><a href="/actor/{{ actors['id'] }}"> {{ actors['name'] }}</a>
-        ({{ actors['age'] }})</p>
-        {% else %}
-        <p class='age' data-alive="no"><a href="/actor/{{ actors['id'] }}">{{ actors['name'] }}</a>
-        ({{ actors['age_of_death'] }})</p>
-        {% endif %}
-        <p class="important">{{ actors['number_of_shows'] }} shows</p>
+<div class="container">
+    <div class="row justify-content-between">
+        {% for actors in a_actors%}
+        <div class="col-4">
+            <div id="most-active-actor-small-card" class="card" style="width: 18rem;">
+                <img class="card-img-top" src="..." alt="Card image cap">
+                <div class="card-body" onmouseover="isAlive(this)" onmouseout="reset(this)">
+                    {% if actors['age_of_death'] == None %}
+                    <h5 class='card-title' data-alive="yes"><a href="/actor/{{ actors['id'] }}"> {{ actors['name'] }}</a>
+                    ({{ actors['age'] }})</h5>
+                    {% else %}
+                    <h5 class='card-title' data-alive="no"><a href="/actor/{{ actors['id'] }}">{{ actors['name'] }}</a>
+                    ({{ actors['age_of_death'] }})</h5>
+                    {% endif %}
+                    <p class="important">{{ actors['number_of_shows'] }} shows</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endblock %}

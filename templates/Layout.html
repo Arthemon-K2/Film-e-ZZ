@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>{% block title %}{% endblock %} - CC Series</title>
+    <title>{% block title %}{% endblock %} - Film-e-ZZ</title>
     <!-- Import Montserrat font -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
@@ -12,63 +12,58 @@
     <!-- Normalize.css fixes lot of differences between browsers default styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css"/>
 
-    <!-- project wide styling -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style/site.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style/header.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style/footer.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style/background.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style/button.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style/card.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style/table.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style/form.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style/grid.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style/utils.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <!-- page specific styling -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style/detailed-view.css') }}">
     {% block head %}
     {% endblock %}
 </head>
 
 <body>
-    <div id="body-wrapper">
-        <header class="clearfix">
-            <img id="header-logo" src="{{ url_for('static', filename='assets/codecool-logo.png') }}" alt="Codecool Logo">
-            <span id="header-title" class="title">Codecool Series DB</span>
-            <div id="header-auth">
-                <button type="button" id="bt-register">Register</button>
-                <button type="button" id="bt-login">Login</button>
-            </div>
-        </header>
-        <section>
-        <div class="card functions-nav">
-            <form action="{{ url_for('index') }}">
-                <input type="submit" value="Shows List" />
-            </form>
-            <form action="{{ url_for('most_rated_shows') }}">
-                <input type="submit" value="Most Rated Shows" />
-            </form>
-            <form action="{{ url_for('search_show_by_title') }}">
-                <input type="submit" value="Search Show by Title"/>
-            </form>
-            <form action="{{ url_for('get_all_actors') }}">
-                <input type="submit" value="Actors List"/>
-            </form>
-            <form action="{{ url_for('most_active_actors') }}">
-                <input type="submit" value="Most Active Actors"/>
-            </form>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <a class="navbar-brand text-white">
+            <img id="header-logo" src="{{ url_for('static', filename='assets/movie-3.png') }}" width="30" height="30" class="d-inline-block align-top" alt="Film-e-ZZ Logo">
+            Film-e-ZZ
+        </a>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}">Shows List</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('most_rated_shows') }}">Most Rated Shows</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('search_show_by_title') }}">Search By Title</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('get_all_actors') }}">Actors List</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('most_active_actors') }}">Most Active Actors</a>
+                </li>
+            </ul>
+            <span class="navbar-text">
+                <form class="d-flex flex-row">
+                    {% if 'username' not in session %}
+                    <a class="btn btn-secondary mx-1" href="{{ url_for('user_registration') }}">Register</a>
+                    <a class="btn btn-secondary mx-1" href="{{ url_for('user_login') }}">Login</a>
+                    {% else %}
+                    <p class="text-center m-auto">Signed in {{ username }}</p>
+                    <a class="btn btn-secondary mx-1" href="{{ url_for('user_logout') }}">Logout</a>
+                    {% endif %}
+                </form>
+            </span>
         </div>
-        {% block content %}
-        {% endblock %}
-        </section>
-        <footer>
-            Copyright, bla-bla
-        </footer>
-    </div>
-    <div class="background">
-        <div class="dark-blue-layer"></div>
-        <div class="light-blue-layer"></div>
-    </div>
+    </nav>
+    {% block content %}
+    {% endblock %}
+    <footer class="footer fixed-bottom bg-dark">
+        <div class="container text-center">
+            <span class="text-muted">
+                Copyright, Coding Bear Studio | 2022
+            </span>
+        </div>
+    </footer>
     <script src="../static/js/app.js"></script>
 </body>
 </html>

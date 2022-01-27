@@ -57,7 +57,7 @@ def get_season_details_show_id(show_id):
     INNER JOIN seasons ON shows.id = seasons.show_id
     WHERE shows.id = %(show_id)s
     GROUP BY shows.id, season_number, seasons.title, seasons.overview
-    ORDER BY season_number ASC
+    ORDER BY season_number ASC;
     """, {'show_id': show_id})
 
 
@@ -74,7 +74,7 @@ def get_show_actors(show_id):
         INNER JOIN actors a on sc.actor_id = a.id
     WHERE shows.id = %(show_id)s
     GROUP BY a.name, shows.id, character_name, sc.id
-    order by sc.id
+    order by sc.id;
     """, {'show_id': show_id})
 
 
@@ -88,7 +88,7 @@ def get_actor_details(actor_id):
     FROM actors
         INNER JOIN show_characters sc on actors.id = sc.actor_id
         INNER JOIN shows s on s.id = sc.show_id
-    WHERE actor_id = %(actor_id)s
+    WHERE actor_id = %(actor_id)s;
     """, {'actor_id': actor_id})
 
 
@@ -100,7 +100,7 @@ def get_actor_works(actor_id):
     FROM actors
         INNER JOIN show_characters sc on actors.id = sc.actor_id
         INNER JOIN shows s on s.id = sc.show_id
-    WHERE actor_id = %(actor_id)s
+    WHERE actor_id = %(actor_id)s;
     """, {'actor_id': actor_id})
 
 
@@ -110,7 +110,7 @@ def get_all_actors():
         id,
         name
     FROM actors
-    ORDER BY name ASC
+    ORDER BY name ASC;
     """)
 
 
@@ -141,3 +141,20 @@ def search_show_by_title(search_word):
     FROM shows
     WHERE title ILIKE '%{search_word}%';
     """)
+
+
+def add_user_from_register(user_name, user_email, user_firstname, user_lastname, user_pssw_hashed, user_reg_date, user_role):
+    data_manager.execute_insert("""
+    INSERT INTO ud (user_name, email, first_name, last_name, hash_pass, reg_date, user_role)
+    VALUES ( %(un)s, %(el)s, %(fn)s, %(ln)s, %(hp)s, %(rd)s, %(ur)s);
+    """, {'un': user_name, 'el': user_email, 'fn': user_firstname, 'ln': user_lastname, 'hp': user_pssw_hashed, 'rd': user_reg_date, 'ur': user_role})
+
+
+def get_user_from_login(user_name):
+    return data_manager.execute_select("""
+    SELECT
+        user_name,
+        hash_pass
+    FROM ud
+    WHERE user_name = %(un)s;
+    """, {'un': user_name})
