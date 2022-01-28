@@ -1,22 +1,23 @@
-import password as password
+from datetime import datetime
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, session
 from flask_paginate import Pagination, get_page_args
-from data import queries
-from datetime import datetime
 import utils
+from data import queries
 
 load_dotenv()
 app = Flask('Film-e-ZZ')
 app.secret_key = b'Film-e-ZZs3cr3tk3y'
 
 
-
 @app.route('/')
 def index():
-    print(session['username'])
-    shows = queries.get_shows()
-    return render_template('index.html', shows=shows, username=session['username'])
+    if 'username' in session:
+        shows = queries.get_shows()
+        return render_template('index.html', shows=shows, username=session['username'])
+    else:
+        shows = queries.get_shows()
+        return render_template('index.html', shows=shows, username='Visitor')
 
 
 @app.route('/design')
@@ -91,9 +92,9 @@ def user_registration():
         user_pssw_hashed = utils.hash_password(request.form.get('inputPassword'))
         user_role = request.form.get('userRole')
         user_reg_date = datetime.now()
-        queries.add_user_from_register(user_name, user_email, user_firstname, user_lastname, user_pssw_hashed, user_reg_date, user_role)
+        queries.add_user_from_register(user_name, user_email, user_firstname, user_lastname, user_pssw_hashed,
+                                       user_reg_date, user_role)
         return redirect('/')
-
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -116,7 +117,9 @@ def user_login():
 
 @app.route('/logout')
 def user_logout():
-    return render_template('/')
+    if 'username' in session:
+        session.clear()
+    return redirect('/')
 
 
 def main():
