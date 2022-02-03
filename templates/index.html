@@ -14,13 +14,4 @@
                 navigation.
             </p>
         </div>
-        <div class="card">
-            <ul>
-                {% for show in shows %}
-                    <li>
-                        <a href="{{ '/show/' + (show['id'] | string) }}">{{ show['title'] }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
 {% endblock %}

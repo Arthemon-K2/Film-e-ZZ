@@ -1,0 +1,49 @@
+{% extends 'Layout.html' %}
+{% block title %}Edit Show{% endblock %}
+{% block content %}
+    <div class="container bg-light rounded my-2">
+        <h1 class="text-center display-1">Edit Show</h1>
+    </div>
+    <div class="container card bg-dark text-white my-2">
+        {% for show_details in show %}
+        <form action="/show/{{ show_details['id'] }}/edit" method="post" class="form-floating mt-3">
+            <div class="form-floating mt-2">
+                <input type="text" class="form-control bg-dark text-white" name="show_title" placeholder="The big Show TITLE here..." value="{{ show_details['title'] }}"/>
+                <label for="show_title" class="form-label">Show Title</label>
+            </div>
+            <div class="form-floating mt-2">
+                <input type="date" class="form-control bg-dark text-white" name="show_release_date" placeholder="Use YYYY-MM-DD date format | i.e.: 1999-12-31" value="{{ show_details['year'] }}"/>
+                <label for="show_release_date" class="form-label">Show Release Date</label>
+            </div>
+            <div class="form-floating mt-2">
+                <input type="number" class="form-control bg-dark text-white" name="show_runtime" placeholder="60 | use only minutes" value="{{ show_details['runtime'] }}"/>
+                <label for="show_runtime" class="form-label">Show Runtime</label>
+            </div>
+            <div class="form-floating mt-2">
+                <input type="number" class="form-control bg-dark text-white" name="show_rating" placeholder="i.e.: 3.3 or 3.0" value="{{ show_details['rating'] }}"/>
+                <label for="show_rating" class="form-label">Show Rating</label>
+            </div>
+            <div class="form-floating mt-2">
+                <input type="text" class="form-control bg-dark text-white" name="show_homepage" placeholder="http://www.hbo.com/band-of-brothers" value="{{ show_details['homepage'] }}"/>
+                <label for="show_homepage" class="form-label">Show Homepage</label>
+            </div>
+            <div class="form-floating mt-2">
+                <input type="text" class="form-control bg-dark text-white" name="show_trailer" placeholder="http://youtube.com/watch?v=kyDkHvi9yeI | no https://" value="{{ show_details['trailer'] }}"/>
+                <label for="show_trailer" class="form-label">Show Trailer URL</label>
+            </div>
+            <div class="form-floating mt-2">
+                <input type="text" class="form-control bg-dark text-white" name="show_cover_pic" placeholder="https://m.media-amazon.com/images/I/71I7iM-kBiL._SS500_.jpg | Use only 500x500 pixel pictures" value="{{ show_details['cover_pic'] }}"/>
+                <label for="show_cover_pic" class="form-label">Show Cover art URL</label>
+            </div>
+            <div class="form-floating mt-2">
+                <textarea class="form-control bg-dark text-white" name="show_overview" placeholder="Every villain has a noble cause, and every hero... " style="height: 100px;">{{ show_details['overview'] }}</textarea>
+                <label for="show_overview" class="form-label">Show overview</label>
+            </div>
+            <div class="d-flex justify-content-between p-3">
+                <a href="/show/{{ show_details['id'] }}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-secondary">Save</button>
+            </div>
+        </form>
+        {% endfor %}
+    </div>
+{% endblock %}

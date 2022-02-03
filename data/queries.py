@@ -2,7 +2,7 @@ from data import data_manager
 
 
 def get_shows():
-    return data_manager.execute_select('SELECT id, title FROM shows;')
+    return data_manager.execute_select('SELECT id, title, overview, cover_pic FROM shows;')
 
 
 def get_most_rated_shows():
@@ -35,7 +35,8 @@ def get_show_details(show_id):
        shows.homepage,
        shows.overview,
        string_agg(DISTINCT character_name, ', ') AS charaters_name,
-       string_agg(DISTINCT a.name, ', ') AS actors_name
+       string_agg(DISTINCT a.name, ', ') AS actors_name,
+       shows.cover_pic
     FROM shows
          INNER JOIN show_genres ON shows.id = show_genres.show_id
          INNER JOIN genres ON show_genres.genre_id = genres.id
@@ -158,3 +159,20 @@ def get_user_from_login(user_name):
     FROM ud
     WHERE user_name = %(un)s;
     """, {'un': user_name})
+
+
+def modify_show_details(idn, title, date, runtime, rating, homepage, trailer, cover, overview):
+    data_manager.execute_insert("""
+    UPDATE shows
+    SET 
+        title = %(st)s,
+        year = %(sd)s,
+        overview = %(so)s,
+        runtime = %(sr)s,
+        trailer = %(strail)s,
+        homepage = %(sh)s,
+        rating = %(srat)s,
+        cover_pic = %(sc)s
+    WHERE id = %(id)s;
+    """, {'id': idn, 'st': title, 'sd': date, 'so': overview, 'sr': runtime, 'strail': trailer,
+          'sh': homepage, 'srat': rating, 'sc': cover})
