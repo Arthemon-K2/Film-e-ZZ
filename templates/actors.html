@@ -1,12 +1,18 @@
 {% extends 'Layout.html' %}
 {% block title %}Actors List{% endblock %}
 {% block content %}
-    <h1 class="title text-center">Actors in database</h1>
-    <div class="card">
-        <ul>
+    <div class="container-sm">
+        <div class="d-flex flex-wrap">
             {% for actor in actors_list %}
-                <li><a href="/actor/{{ actor['id'] }}">{{ actor['name'] }}</a></li>
+                <div class="card bg-dark text-white text-center m-1 shadow" style="width: 205px;">
+                    <img src="{{ actor['actor_pic'] }}" class="card-img-top" alt="{{ actor['name'] }} picture">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ actor['name'] }}</h5>
+                        <p class="card-text text-truncate">{{ actor['biography'] }}</p>
+                        <a href="/actor/{{ actor['id'] }}" class="btn btn-secondary">Details</a>
+                    </div>
+                </div>
             {% endfor %}
-        </ul>
+        </div>
     </div>
 {% endblock %}

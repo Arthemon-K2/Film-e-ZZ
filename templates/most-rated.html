@@ -1,13 +1,12 @@
 {% extends 'Layout.html' %}
 {% block title %}Shows{% endblock %}
-{% block head %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
-{% endblock %}
 {% block content %}
-    <h1 class="display-1 text-center">Most Rated Shows</h1>
-    <div class="content-fluid">
-        <table class="table table-striped">
-            <thead class="thead-dark">
+    <div class="container bg-light my-4 rounded">
+        <h1 class="display-1 text-center">Most Rated Shows</h1>
+    </div>
+    <div class="content-fluid rounded m-5">
+        <table class="table table-dark table-striped table-hover">
+            <thead class="text-center">
                 <tr>
                     <th scope="col">Title</th>
                     <th scope="col">Year</th>
@@ -18,7 +17,7 @@
                     <th scope="col">Homepage</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="text-center">
             {% for show_details in shows %}
                 <tr>
                     <th scope="row"><a href="/show/{{ show_details['id'] }}">{{ show_details['title'] }}</a></th>
@@ -40,8 +39,8 @@
             {% endfor %}
             </tbody>
         </table>
-    </div>
-    <div class="pagination justify-content-center">
-       {{ pagination.links }}
+        <div class="pagination justify-content-center">
+           {{ pagination.links }}
+        </div>
     </div>
 {% endblock %}

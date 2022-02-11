@@ -1,15 +1,37 @@
 {% extends 'Layout.html' %}
 {% block title %}Actor Info{% endblock %}
 {% block content %}
-    <div class="card">
-        <h1>Actor informations</h1>
-        <br>
-        {% for details in actor %}
-        <p>Name of actor: {{ details['name'] }}</p>
-        <p>Date of birth: {{ details['birthday'] }}</p>
-        <p>Date of death if it died already: {{ details['death'] }}</p>
-        <p>Biograpy: {{ details['biography'] }}</p>
-        <p>Movies or series list:{% for actor_shows in actor_works %} <a href="/show/{{ actor_shows['id'] }}">{{ actor_shows['title'] }}</a>, {% endfor %}</p>
-        {% endfor %}
+    <div class="container">
+        <div class="container bg-light rounded my-2">
+            <h1 class="text-center display-1">Actor details</h1>
+        </div>
+        <div class="card justify-content-center bg-dark text-white">
+            <div class="row g-0">
+            {% for details in actor %}
+                <div class="col-md-4">
+                    <img src="{{ details['actor_pic'] }}" class="img-fluid rounded-start m-3" alt="...">
+                </div>
+                <div class="col-md-8 px-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                        {% if 'username' not in session %}
+                        <h5 class="card-title">{{ details['name'] }}</h5>
+                        {% else %}
+                        <h5 class="card-title">{{ details['name'] }}</h5>
+                        <div class="d-flex align-items-center">
+                            <a href="/actor/{{ details['id'] }}/edit" class="btn btn-secondary btn-sm mx-1"><i class="fa fa-pencil-square pe-2" aria-hidden="true"></i>Edit</a>
+                            <a href="" class="btn btn-secondary btn-sm mx-1"><i class="fa fa-pencil-square pe-2" aria-hidden="true"></i>Delete</a>
+                        </div>
+                        {% endif %}
+                        </div>
+
+                        <p class="card-text">Date of birth: {{ details['birthday'] }}</p>
+                        <p class="card-text">Biograpy: {{ details['biography'] }}</p>
+                        <p class="card-text">Movies or series list:{% for actor_shows in actor_works %} <a href="/show/{{ actor_shows['id'] }}">{{ actor_shows['title'] }}</a>, {% endfor %}</p>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
     </div>
 {% endblock %}

@@ -2,7 +2,15 @@ from data import data_manager
 
 
 def get_shows():
-    return data_manager.execute_select('SELECT id, title FROM shows;')
+    return data_manager.execute_select("""
+    SELECT
+        id,
+        title,
+        overview,
+        cover_pic
+     FROM shows
+     ORDER BY title;
+     """)
 
 
 def get_most_rated_shows():
@@ -35,15 +43,15 @@ def get_show_details(show_id):
        shows.homepage,
        shows.overview,
        string_agg(DISTINCT character_name, ', ') AS charaters_name,
-       string_agg(DISTINCT a.name, ', ') AS actors_name
+       string_agg(DISTINCT a.name, ', ') AS actors_name,
+       shows.cover_pic
     FROM shows
          INNER JOIN show_genres ON shows.id = show_genres.show_id
          INNER JOIN genres ON show_genres.genre_id = genres.id
          INNER JOIN show_characters sc on shows.id = sc.show_id
          INNER JOIN actors a on sc.actor_id = a.id
     WHERE shows.id = %(show_id)s
-    GROUP BY shows.id, rating
-    ORDER BY rating DESC;
+    GROUP BY shows.id;
     """, {'show_id': show_id})
 
 
@@ -84,7 +92,9 @@ def get_actor_details(actor_id):
         DISTINCT actors.name,
         actors.birthday,
         actors.death,
-        actors.biography
+        actors.biography,
+        actors.id,
+        actors.actor_pic
     FROM actors
         INNER JOIN show_characters sc on actors.id = sc.actor_id
         INNER JOIN shows s on s.id = sc.show_id
@@ -108,7 +118,9 @@ def get_all_actors():
     return data_manager.execute_select("""
     SELECT
         id,
-        name
+        name,
+        biography,
+        actor_pic
     FROM actors
     ORDER BY name ASC;
     """)
@@ -121,7 +133,8 @@ def get_most_active_actors():
         actors.name,
         (CURRENT_DATE - actors.birthday) / 365 AS age,
         (actors.death - actors.birthday) / 365 AS age_of_death,
-        COUNT(s.id) AS number_of_shows
+        COUNT(s.id) AS number_of_shows,
+        actor_pic
     FROM actors
         INNER JOIN show_characters sc on actors.id = sc.actor_id
         INNER JOIN shows s on s.id = sc.show_id
@@ -158,3 +171,34 @@ def get_user_from_login(user_name):
     FROM ud
     WHERE user_name = %(un)s;
     """, {'un': user_name})
+
+
+def modify_show_details(idn, title, date, runtime, rating, homepage, trailer, cover, overview):
+    data_manager.execute_insert("""
+    UPDATE shows
+    SET 
+        title = %(st)s,
+        year = %(sd)s,
+        overview = %(so)s,
+        runtime = %(sr)s,
+        trailer = %(strail)s,
+        homepage = %(sh)s,
+        rating = %(srat)s,
+        cover_pic = %(sc)s
+    WHERE id = %(id)s;
+    """, {'id': idn, 'st': title, 'sd': date, 'so': overview, 'sr': runtime, 'strail': trailer,
+          'sh': homepage, 'srat': rating, 'sc': cover})
+
+
+def modify_actors_details(aid, aname, abirthday, adeath, abio, apic):
+    data_manager.execute_insert("""
+    UPDATE actors
+    SET
+        name = %(nm)s,
+        birthday = %(bd)s,
+        death = %(det)s,
+        biography = %(bio)s,
+        actor_pic = %(pic)s
+    WHERE id = %(id)s        
+    """, {'nm': aname, 'bd': abirthday, 'det': adeath,
+          'bio': abio, 'pic': apic, 'id': aid})

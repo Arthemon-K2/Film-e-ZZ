@@ -1,41 +1,58 @@
 {% extends 'Layout.html' %}
 {% block title %}Show Details{% endblock %}
-{% block head %}<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />{% endblock %}
 {% block content %}
-        <h1 class="title text-center">Show details</h1>
-
-        <div class="card detailed-view">
+        <div class="container bg-light rounded my-2">
+            <h1 class="text-center display-1">Show details</h1>
+        </div>
+        <div class="container card bg-dark text-white my-2">
             {% for show_details in show %}
             <div class="row">
-                {% if show_details['trailer'] == None %}
-                <img src="https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg" class="poster col col-third"></img>
-                {% else %}
-                <iframe id="player" class="poster col col-third" type="text/html" width="640" height="390"
-                    src="http://www.youtube.com/embed/{{ show_details['trailer'][27:] }}" frameborder="0">
-                </iframe>
-                {% endif %}
-
+                <div class="card text-center pt-3 m-1 shadow bg-dark" style="width: 18rem;">
+                    <img src="{{ show_details['cover_pic'] }}" class="card-img-top" alt="{{ show_details['title'] }} cover picture">
+                </div>
                 <div class="col col-twothird">
-                    <h2>{{ show_details['title'] }}</h2>
+                    <div class="d-flex justify-content-between">
+                        {% if 'username' not in session %}
+                        <h2 class="py-3">{{ show_details['title'] }}</h2>
+                        {% else %}
+                        <h2 class="py-3">{{ show_details['title'] }}</h2>
+                        <div class="d-flex align-items-center">
+                            <a href="/show/{{ show_details['id'] }}/edit" class="btn btn-secondary btn-sm mx-1"><i class="fa fa-pencil-square pe-2" aria-hidden="true"></i>Edit</a>
+                            <a href="" class="btn btn-secondary btn-sm mx-1"><i class="fa fa-pencil-square pe-2" aria-hidden="true"></i>Delete</a>
+                        </div>
+                        {% endif %}
+                    </div>
                     <p class="small grayed"> {{ show_details['runtime'] }} min <span class="separator">|</span> {{ show_details['genres'] }} <span
                             class="separator">|</span> {{ show_details['year'] }} <span class="separator">|</span> Rating: <span id="show_rating">{{ '%0.1f' | format(show_details['rating'] | float) }}</span> <span> </span> <span id=stars></span></p>
                     <br>
                     <p><b>{{ show_details['overview'] }}</b></p>
                     <br>
-                    <p><b>Stars:</b>&nbsp;{% for actor in actors %} {{ actor['character_name'] }} (<a href="/actor/{{ actor['actor_id'] }}">{{ actor['name'] }}</a>), {% endfor %} </p>
+                    <p class="card-text"><b>Stars:</b>&nbsp;{% for actor in actors %} {{ actor['character_name'] }} (<a href="/actor/{{ actor['actor_id'] }}">{{ actor['name'] }}</a>), {% endfor %}</p>
+                    <div class="container text-center">
+                        {% if show_details['trailer'] == None %}
+                        <img src="https://cdn3.vectorstock.com/i/1000x1000/50/07/http-404-not-found-error-message-hypertext-vector-20025007.jpg " class="py-3 col col-third"/>
+                        {% else %}
+                        <iframe id="player" class="py-3 col col-third" type="text/html" width="640" height="390"
+                            src="http://www.youtube.com/embed/{{ show_details['trailer'][27:] }}" frameborder="0">
+                        </iframe>
+                        {% endif %}
+                    </div>
                 </div>
+
             </div>
         </div>
         {% endfor %}
-        <div class="card">
+        <div class="container card my-2">
             {% for show_details in show %}
-            <h2 class="text-center">{{ show_details['title'] }} - seasons:</h2>
+            <h2 class="text-center p-3">{{ show_details['title'] }} - seasons:</h2>
             {% endfor %}
-            <table>
-                <thead>
-                    <th></th>
-                    <th>Title</th>
-                    <th>Overview</th>
+            <table class="table table-striped">
+                <thead class="bg-dark text-white text-center">
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Overview</th>
+                    </tr>
                 </thead>
                 <tbody>
                 {% for season_details in seasons %}
@@ -52,30 +69,4 @@
                 </tbody>
             </table>
         </div>
-        <script>
-            const rating = document.getElementById('show_rating').innerHTML
-            document.getElementById("stars").innerHTML = getStars(rating);
-
-            function getStars(rating) {
-
-                // Round to nearest half
-                rating = Math.round(rating * 2) / 2;
-                let output = [];
-
-                // Append all the filled whole stars
-                for (var i = rating; i >= 1; i--)
-                    output.push('<i class="fa fa-star" aria-hidden="true" style="color: gold;"></i>&nbsp;');
-
-                // If there is a half a star, append it
-                if (i == .5) output.push('<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold;"></i>&nbsp;');
-
-                // Fill the empty stars
-                for (let i = (5 - rating); i >= 1; i--)
-                    output.push('<i class="fa fa-star-o" aria-hidden="true" style="color: gold;"></i>&nbsp;');
-
-                return output.join('');
-
-            }
-        </script>
-
 {% endblock %}
