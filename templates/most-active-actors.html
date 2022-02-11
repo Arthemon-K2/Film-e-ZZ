@@ -5,10 +5,10 @@
 <div class="container">
     <div class="row justify-content-between">
         {% for actors in a_actors%}
-        <div class="col-4">
-            <div id="most-active-actor-small-card" class="card" style="width: 18rem;">
-                <img class="card-img-top img-thumbnail" src="..." alt="Card image cap">
-                <div class="card-body" onmouseover="isAlive(this)" onmouseout="reset(this)">
+        <div class="col-3 m-2">
+            <div id="most-active-actor-small-card" onmouseover="isAlive(this)" onmouseout="reset(this)" class="card" style="width: 18rem;">
+                <img class="card-img-top img-thumbnail" src="{{ actors['actor_pic'] }}" alt="Card image cap">
+                <div class="card-body text-center">
                     {% if actors['age_of_death'] == None %}
                     <h5 class='card-title' data-alive="yes"><a href="/actor/{{ actors['id'] }}"> {{ actors['name'] }}</a>
                     ({{ actors['age'] }})</h5>
@@ -16,7 +16,7 @@
                     <h5 class='card-title' data-alive="no"><a href="/actor/{{ actors['id'] }}">{{ actors['name'] }}</a>
                     ({{ actors['age_of_death'] }})</h5>
                     {% endif %}
-                    <p class="important">{{ actors['number_of_shows'] }} shows</p>
+                    <p class="display-5">{{ actors['number_of_shows'] }} shows</p>
                 </div>
             </div>
         </div>

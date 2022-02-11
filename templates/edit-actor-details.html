@@ -1,0 +1,38 @@
+{% extends 'Layout.html' %}
+{% block title %}Edit Actor details{% endblock %}
+{% block content %}
+    <div class="container bg-light rounded my-2">
+        <h1 class="text-center display-1">Edit Actor</h1>
+    </div>
+    <div class="container card bg-dark text-white my-2">
+        {% for details in actors %}
+        <form action="/actor/{{ details['id'] }}/edit" method="post" class="form-floating mt-3">
+            <div class="form-floating mt-2">
+                <input type="text" class="form-control bg-dark text-white" name="actors_name" placeholder="John Doe" value="{{ details['name'] }}"/>
+                <label for="actors_name" class="form-label">Actor's Name</label>
+            </div>
+            <div class="form-floating mt-2">
+                <input type="date" class="form-control bg-dark text-white" name="actors_birthday" placeholder="Use YYYY-MM-DD date format | i.e.: 1999-12-31" value="{{ details['birthday'] }}"/>
+                <label for="actors_birthday" class="form-label">Actor's birthday</label>
+            </div>
+{#            <div class="form-floating mt-2">#}
+{#                <input type="text" class="form-control bg-dark text-white" name="actors_death" placeholder="Use YYYY-MM-DD date format | i.e.: 1999-12-31" value="{{ details['death'] }}"/>#}
+{#                <label for="actors_death" class="form-label">Actor's death</label>#}
+{#            </div>#}
+            <div class="form-floating mt-2">
+                <textarea type="text" class="form-control bg-dark text-white" name="actors_bio" placeholder="He or she birth in somewhere in YYYY_MM_DD">{{ details['biography'] }}</textarea>
+                <label for="actors_bio" class="form-label">Actor's Biography</label>
+            </div>
+            <div class="input-group form-floating mb-3 mt-2">
+                <input type="text" class="form-control bg-dark text-white" name="actors_pic" placeholder="https://m.media-amazon.com/images/I/71I7iM-kBiL._SS500_.jpg | Use only 500x500 pixel pictures" value="{{ details['actor_pic'] }}"/>
+                <label for="actors_pic" class="form-label">Actor's Picture URL</label>
+                <a class="btn" href="https://www.google.com/search?q={{ details['name'] }}" target="_blank"><button class="btn btn-outline-secondary" type="button" id="button-addon2">Search on google</button></a>
+            </div>
+            <div class="d-flex justify-content-between p-3">
+                <a href="/actor/{{ details['id'] }}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-secondary">Save</button>
+            </div>
+        </form>
+        {% endfor %}
+    </div>
+{% endblock %}

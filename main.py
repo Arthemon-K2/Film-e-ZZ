@@ -10,6 +10,7 @@ app = Flask('Film-e-ZZ')
 app.secret_key = b'Film-e-ZZs3cr3tk3y'
 
 
+
 @app.route('/')
 def index():
     if 'username' in session:
@@ -18,14 +19,34 @@ def index():
         return render_template('index.html', username='Visitor')
 
 
+
+def get_shows_all(offset=0, per_page=20):
+    get_all_shows = queries.get_shows()[offset: offset + 12]
+    return get_all_shows
+
+
 @app.route('/shows')
 def get_all_shows():
     if 'username' in session:
-        shows = queries.get_shows()
-        return render_template('shows.html', shows=shows, username=session['username'])
+        page, per_page, offset = get_page_args(page_parameter='page',
+                                               per_page_parameter='per_page')
+        total = len(queries.get_shows())
+        pagination_get_shows = get_shows_all(offset=offset, per_page=per_page)
+        print(pagination_get_shows)
+        pagination = Pagination(page=page, per_page=per_page, total=total, css_framework='bootstrap4')
+        return render_template('shows.html',
+                               shows=pagination_get_shows,
+                               page=page,
+                               per_page=per_page,
+                               pagination=pagination,
+                               username=session['username'])
     else:
         shows = queries.get_shows()
         return render_template('shows.html', shows=shows, username='Visitor')
+
+
+
+
 
 @app.route('/shows/most-rated')
 def most_rated_shows():
@@ -56,7 +77,7 @@ def most_rated_shows():
 
 
 def get_shows(offset=0, per_page=15):
-    most_rated_shows = queries.get_most_rated_shows()[offset: offset + per_page]
+    most_rated_shows = queries.get_most_rated_shows()[offset: offset + 15]
     return most_rated_shows
 
 
@@ -111,6 +132,24 @@ def show_actor_informations(id):
         actor_works = queries.get_actor_works(id)
         return render_template('actor-details.html', actor=details, actor_works=actor_works,
                                username='Visitor')
+
+
+@app.route('/actor/<int:id>/edit', methods=['GET', 'POST'])
+def edit_actor_details(id):
+    if request.method == 'GET':
+        details = queries.get_actor_details(id)
+        actor_works = queries.get_actor_works(id)
+        return render_template('edit-actor-details.html', actors=details,
+                               actor_works=actor_works)
+    elif request.method == 'POST':
+        actor_name = request.form.get('actors_name')
+        actor_birthday = request.form.get('actors_birthday')
+        actor_death = request.form.get('actors_death')
+        actor_biography = request.form.get('actors_bio')
+        actor_pic = request.form.get('actors_pic')
+        queries.modify_actors_details(id, actor_name, actor_birthday, actor_death, actor_biography, actor_pic)
+        return redirect(url_for('show_actor_informations', id=id))
+
 
 
 @app.route('/actors')

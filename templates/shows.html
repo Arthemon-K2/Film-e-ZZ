@@ -4,7 +4,7 @@
     <div class="container-sm">
         <div class="d-flex flex-wrap">
             {% for show in shows %}
-                <div class="card text-center m-1 shadow" style="width: 18rem;">
+                <div class="card bg-dark text-white text-center m-1 shadow" style="width: 18rem;">
                     <img src="{{ show['cover_pic'] }}" class="card-img-top" alt="{{ show['title'] }} cover picture">
                     <div class="card-body">
                         <h5 class="card-title">{{ show['title'] }}</h5>
@@ -13,6 +13,9 @@
                     </div>
                 </div>
             {% endfor %}
+        </div>
+        <div class="pagination justify-content-center my-3">
+           {{ pagination.links }}
         </div>
     </div>
 {% endblock %}

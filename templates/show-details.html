@@ -7,14 +7,9 @@
         <div class="container card bg-dark text-white my-2">
             {% for show_details in show %}
             <div class="row">
-                {% if show_details['trailer'] == None %}
-                <img src="https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg" class="py-3 col col-third"/>
-                {% else %}
-                <iframe id="player" class="py-3 col col-third" type="text/html" width="640" height="390"
-                    src="http://www.youtube.com/embed/{{ show_details['trailer'][27:] }}" frameborder="0">
-                </iframe>
-                {% endif %}
-
+                <div class="card text-center pt-3 m-1 shadow bg-dark" style="width: 18rem;">
+                    <img src="{{ show_details['cover_pic'] }}" class="card-img-top" alt="{{ show_details['title'] }} cover picture">
+                </div>
                 <div class="col col-twothird">
                     <div class="d-flex justify-content-between">
                         {% if 'username' not in session %}
@@ -32,8 +27,18 @@
                     <br>
                     <p><b>{{ show_details['overview'] }}</b></p>
                     <br>
-                    <p><b>Stars:</b>&nbsp;{% for actor in actors %} {{ actor['character_name'] }} (<a href="/actor/{{ actor['actor_id'] }}">{{ actor['name'] }}</a>), {% endfor %} </p>
+                    <p class="card-text"><b>Stars:</b>&nbsp;{% for actor in actors %} {{ actor['character_name'] }} (<a href="/actor/{{ actor['actor_id'] }}">{{ actor['name'] }}</a>), {% endfor %}</p>
+                    <div class="container text-center">
+                        {% if show_details['trailer'] == None %}
+                        <img src="https://cdn3.vectorstock.com/i/1000x1000/50/07/http-404-not-found-error-message-hypertext-vector-20025007.jpg " class="py-3 col col-third"/>
+                        {% else %}
+                        <iframe id="player" class="py-3 col col-third" type="text/html" width="640" height="390"
+                            src="http://www.youtube.com/embed/{{ show_details['trailer'][27:] }}" frameborder="0">
+                        </iframe>
+                        {% endif %}
+                    </div>
                 </div>
+
             </div>
         </div>
         {% endfor %}
@@ -42,10 +47,12 @@
             <h2 class="text-center p-3">{{ show_details['title'] }} - seasons:</h2>
             {% endfor %}
             <table class="table table-striped">
-                <thead class="bg-dark text-white">
-                    <th></th>
-                    <th>Title</th>
-                    <th>Overview</th>
+                <thead class="bg-dark text-white text-center">
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Overview</th>
+                    </tr>
                 </thead>
                 <tbody>
                 {% for season_details in seasons %}
@@ -62,30 +69,4 @@
                 </tbody>
             </table>
         </div>
-        <script>
-            const rating = document.getElementById('show_rating').innerHTML
-            document.getElementById("stars").innerHTML = getStars(rating);
-
-            function getStars(rating) {
-
-                // Round to nearest half
-                rating = Math.round(rating) / 2;
-                let output = [];
-
-                // Append all the filled whole stars
-                for (var i = rating; i >= 1; i--)
-                    output.push('<i class="fa fa-star" aria-hidden="true" style="color: gold;"></i>&nbsp;');
-
-                // If there is a half a star, append it
-                if (i == .5) output.push('<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold;"></i>&nbsp;');
-
-                // Fill the empty stars
-                for (let i = (5 - rating); i >= 1; i--)
-                    output.push('<i class="fa fa-star-o" aria-hidden="true" style="color: gold;"></i>&nbsp;');
-
-                return output.join('');
-
-            }
-        </script>
-
 {% endblock %}
